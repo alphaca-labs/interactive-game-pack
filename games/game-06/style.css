@@ -282,3 +282,7 @@ noscript { position: fixed; inset: auto 0 0; z-index: 99; padding: 12px; color: 
   button, .customer-zone, .counter-zone, .kitchen-zone, .hud, .order-ticket, .modal-card { forced-color-adjust: auto; border: 2px solid ButtonText; }
   .station-progress, .meter-track, .patience-track { border: 1px solid CanvasText; }
 }
+
+/* 팩 허브(루트 index.html)로 돌아가는 링크 — 8종 공통 동선. 나머지 7종은 각자 이미 갖고 있다. */
+.hub-link { position: relative; display: block; margin-top: 12px; min-height: 44px; line-height: 44px; color: var(--forest); font-weight: 700; font-size: 14px; text-decoration: underline; text-underline-offset: 3px; }
+.hub-link:hover { color: var(--tomato); }

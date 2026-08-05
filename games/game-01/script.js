@@ -927,11 +927,12 @@
   el.muteBtn.addEventListener('click', toggleMute);
   el.replayBtn.addEventListener('click', restart);
   el.moreBtn.addEventListener('click', function () {
-    // 이 게임은 단독 실행이 보장되어야 하므로 외부/상위 경로로 이동하지 않는다.
+    // 팩 허브(루트 index.html)가 생긴 뒤로는 다른 7종과 같이 허브로 돌아간다.
+    // 이 폴더만 따로 전달된 경우(허브 없음)를 대비해 안내 문구는 그대로 띄워 둔다.
     el.moreNote.hidden = false;
     el.moreBtn.disabled = true;
-    el.replayBtn.focus();
-    announce('이 데모는 8종 패키지 중 1번입니다. 나머지는 패키지 첫 화면에서 볼 수 있습니다.');
+    announce('패키지 첫 화면으로 이동합니다.');
+    window.location.href = '../../index.html';
   });
 
   el.resumeBtn.addEventListener('click', function () {
