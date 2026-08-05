@@ -1,0 +1,9 @@
+# 레퍼런스 영상에서 추출한 원본 프레임 — 제3자 저작물이라 공개 저장소·공개 페이지에 올리지 않는다.
+# 판독 결과는 outputs/research-brief.md 에 글로 남아 있다.
+outputs/frames/
+
+# OS · 에디터
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

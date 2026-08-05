@@ -3,8 +3,9 @@
 레퍼런스 영상에서 확인한 **요리 소재 플레이어블 광고 8종**의 실동작 프로토타입과 유형별 견적 자료.
 
 - 공개 데모: https://alphaca-labs.github.io/interactive-game-pack/
+- **견적 보고서: [`outputs/ESTIMATE_REPORT.md`](outputs/ESTIMATE_REPORT.md)** — 견적 · 제작 기간 · 4주 최대 수량 (고객 전달본)
 - 레퍼런스: [PLAYABLE ADS BEST EXAMPLES January 2026](https://www.youtube.com/watch?v=xQH4X57HKQo) — 6초 구간 4종 · 1분 45초 이후 4종
-- 메타데이터: [`games.json`](games.json)
+- 메타데이터: [`games.json`](games.json) · 에셋 출처: [`ASSETS.md`](ASSETS.md)
 
 ## 게임 8종
 
@@ -58,9 +59,29 @@ python3 -m http.server 8080  # http 로 확인하려면
 ## 검증
 
 ```sh
-node scripts/check-hub.mjs    # 허브 ↔ games.json ↔ 디스크 일치 (63 checks)
-node scripts/verify-pack.mjs  # 실제 Chrome 으로 허브 + 8개 진입점 (66 checks)
+node scripts/check-hub.mjs      # 허브 ↔ games.json ↔ 디스크 일치 (63 checks)
+node scripts/verify-pack.mjs    # 실제 Chrome 으로 허브 + 8개 진입점 + 허브 복귀 동선 (84 checks)
+node scripts/capture-thumbs.mjs # 카드 썸네일 재생성 → assets/thumbs/
 ```
 
 `check-hub.mjs` 가 막는 것은 "게임이 디스크에는 있는데 허브 목록에서 조용히 빠지는 것" 하나다.
 디렉터리 이름 규약(`game-0N`)이 어긋나면 그 게임은 화면에서 사라지는데 빌드도 테스트도 아무 말을 하지 않는다.
+
+`verify-pack.mjs` 의 **허브 복귀 검사**도 같은 종류의 조용한 실패를 막는다. 8종은 각자 독립 실행되지만
+팩으로 묶인 이상 "다른 데모 보기" 는 허브로 돌아와야 하는데, 링크가 `<a href>` 인 타이틀과 JS 로 이동하는
+타이틀이 섞여 있어 눈으로는 구분되지 않는다(실제로 game-01 이 이동하지 않고 안내 문구만 띄우고 있었다).
+
+`capture-thumbs.mjs` 는 macOS 의 Chrome 과 `sips` 에 의존한다. 썸네일이 없어도 허브는 원래의 색 배경 카드로
+정상 동작하므로 배포를 막지는 않는다.
+
+## 문서
+
+| 경로 | 내용 |
+|---|---|
+| [`outputs/ESTIMATE_REPORT.md`](outputs/ESTIMATE_REPORT.md) | 견적 · 제작 기간 · 4주 최대 수량 (고객 전달본) |
+| [`outputs/research-brief.md`](outputs/research-brief.md) | 원본 영상 프레임 판독 결과와 8종 확정 근거 |
+| `outputs/plans/*.md` | 타이틀별 기획서 |
+| `outputs/workflow-stage-02-item-0N.md` | 타이틀별 구현 · 검증 보고 |
+| [`ASSETS.md`](ASSETS.md) | 에셋 출처와 외부 요청 0건 계측 근거 |
+
+원본 영상에서 추출한 프레임(`outputs/frames/`)은 제3자 저작물이라 저장소에서 제외했다(`.gitignore`).
