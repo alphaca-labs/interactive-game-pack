@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Interactive Game Pack — 플레이어블 광고 8종 데모</title>
+    <meta
+      name="description"
+      content="레퍼런스 영상에서 확인한 요리 소재 플레이어블 광고 8종의 실동작 데모와 유형별 견적 · 제작 기간 · 4주 최대 수량."
+    />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#17110d" />
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2317110d'/%3E%3Cpath d='M16 6c3 3.6 4.6 6.2 4.6 8.6a4.6 4.6 0 0 1-9.2 0C11.4 12.2 13 9.6 16 6z' fill='%23ff9d4d'/%3E%3Cpath d='M16 14.5c1.4 1.7 2.1 2.9 2.1 4a2.1 2.1 0 1 1-4.2 0c0-1.1.7-2.3 2.1-4z' fill='%23ffe3b0'/%3E%3Crect x='8' y='23' width='16' height='2.6' rx='1.3' fill='%23c9a274'/%3E%3C/svg%3E"
+    />
+  </head>
+  <body>
+    <a class="skip-link" href="#games">게임 목록으로 건너뛰기</a>
+
+    <header class="hero">
+      <div class="hero__glow" aria-hidden="true"></div>
+      <div class="shell hero__inner">
+        <p class="eyebrow">Playable Ad Prototype Pack · 2026</p>
+        <h1 class="hero__title">
+          요리 소재 플레이어블 광고<br />
+          <span class="hero__count">8종</span> 실동작 데모
+        </h1>
+        <p class="hero__lead">
+          레퍼런스 영상에서 확인한 8종을 각각 독립 실행되는 HTML5 프로토타입으로 만들었습니다.
+          아래 카드를 누르면 바로 플레이됩니다 — 설치도, 로그인도, 외부 리소스 요청도 없습니다.
+        </p>
+        <dl class="hero__stats">
+          <div><dt>구현</dt><dd>8 / 8종</dd></div>
+          <div><dt>외부 에셋</dt><dd>0건</dd></div>
+          <div><dt>번들 총량</dt><dd>약 576&nbsp;KB</dd></div>
+          <div><dt>1판 길이</dt><dd>25~60초</dd></div>
+        </dl>
+        <p class="hero__source">
+          레퍼런스:
+          <a href="https://www.youtube.com/watch?v=xQH4X57HKQo" rel="noreferrer noopener" target="_blank"
+            >PLAYABLE ADS BEST EXAMPLES January 2026</a
+          >
+          — 6초 구간 4종 · 1분 45초 이후 구간 4종
+        </p>
+      </div>
+    </header>
+
+    <main>
+      <section class="shell section" id="games" aria-labelledby="games-heading">
+        <div class="section__head">
+          <h2 id="games-heading">게임 8종</h2>
+          <div class="filters" role="group" aria-label="구간 필터">
+            <button type="button" class="chip is-active" data-filter="all" aria-pressed="true">전체 8종</button>
+            <button type="button" class="chip" data-filter="six-second" aria-pressed="false">6초 구간 4종</button>
+            <button type="button" class="chip" data-filter="after-1m45" aria-pressed="false">1분 45초 이후 4종</button>
+          </div>
+        </div>
+
+        <ul class="grid" id="game-grid">
+          <!-- 카드는 인라인 데이터로 렌더한다 (file:// 에서도 동작하도록 fetch 를 쓰지 않는다) -->
+        </ul>
+      </section>
+
+      <section class="shell section" id="estimate" aria-labelledby="estimate-heading">
+        <div class="section__head">
+          <h2 id="estimate-heading">유형별 견적 · 제작 기간 · 4주 최대 수량</h2>
+        </div>
+        <p class="section__lead">
+          소재별 제작 스펙과 공수 차이가 커서 8종을 하나의 단가로 묶지 않고 <strong>4개 유형</strong>으로 나눴습니다.
+          1트랙 = 시니어 HTML5 개발 1인 + UI/아트 0.5인 + QA 0.5인 기준이며, 4주 = 영업일 20일입니다.
+        </p>
+
+        <div class="table-wrap">
+          <table class="table">
+            <caption class="sr-only">유형별 제작 견적, 제작 기간, 4주 기준 최대 제작 가능 수량</caption>
+            <thead>
+              <tr>
+                <th scope="col">유형</th>
+                <th scope="col">해당 게임</th>
+                <th scope="col">1종 견적</th>
+                <th scope="col">1종 기간</th>
+                <th scope="col">4주 · 1트랙</th>
+                <th scope="col">4주 · 2트랙</th>
+              </tr>
+            </thead>
+            <tbody id="estimate-body"></tbody>
+          </table>
+        </div>
+
+        <ul class="notes">
+          <li>전 금액 <strong>VAT 별도</strong>입니다.</li>
+          <li>1종 범위: 1레벨 · 국문 UI · 사운드 옵션 · 승인 1회 · 광고 SDK 미포함.</li>
+          <li>
+            공용 셸(부트·상태머신·HUD·사운드·접근성 레이어) <strong>2일</strong>은 최초 1회만 발생하고 이후 종에서
+            재사용됩니다.
+          </li>
+          <li>
+            8종 전체 = <strong>79.5 인일</strong>. 4주 안에 8종을 모두 받으시려면 <strong>4트랙 병렬</strong>이
+            필요합니다. 1트랙이면 4주에 A유형 3종 또는 B유형 2종 수준입니다.
+          </li>
+          <li>영상 02:45 이후의 2종(과일 꼬치 정렬 · 회전초밥 경영)은 지정하신 8종 범위 밖이라 제외했습니다.</li>
+        </ul>
+      </section>
+
+      <section class="shell section" id="spec" aria-labelledby="spec-heading">
+        <div class="section__head"><h2 id="spec-heading">공통 제작 스펙</h2></div>
+        <ul class="spec-grid">
+          <li>
+            <h3>런타임</h3>
+            <p>순수 HTML · CSS · JavaScript. 프레임워크 · 번들러 · CDN 의존성 0건이라 <code>file://</code>에서도 그대로 열립니다.</p>
+          </li>
+          <li>
+            <h3>에셋</h3>
+            <p>전량 자체 제작 인라인 SVG와 CSS 도형. 외부 이미지 · 웹폰트 · 음원 라이선스 이슈가 없습니다. 효과음은 Web Audio 합성.</p>
+          </li>
+          <li>
+            <h3>입력</h3>
+            <p>포인터 · 터치 · 키보드를 같은 판정 경로로 처리합니다. 조작 타깃은 최소 44×44px.</p>
+          </li>
+          <li>
+            <h3>접근성</h3>
+            <p>라이브 리전 안내, 포커스 이동, <code>prefers-reduced-motion</code> 대응을 8종 전부에 넣었습니다.</p>
+          </li>
+          <li>
+            <h3>재현성</h3>
+            <p><code>?seed=</code>로 같은 보드를 다시 만들고, <code>?test=1</code>로 규칙 자동 검증을 돌릴 수 있습니다.</p>
+          </li>
+          <li>
+            <h3>반응형</h3>
+            <p>320×568부터 1440×900까지 가로 스크롤 없이 동작합니다. 세로 화면 우선 설계.</p>
+          </li>
+        </ul>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="shell">
+        <p>Interactive Game Pack · 플레이어블 광고 프로토타입 8종</p>
+        <p class="footer__meta">
+          각 게임 디렉터리의 <code>README.md</code>에 규칙 · 조작 · 검증 결과가 있습니다 ·
+          메타데이터: <a href="games.json">games.json</a>
+        </p>
+      </div>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>

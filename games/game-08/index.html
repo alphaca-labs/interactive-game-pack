@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#168fd0" />
+    <meta
+      name="description"
+      content="접시의 레시피를 보고 보드에서 필요한 재료만 골라 담는 40초 수집 게임"
+    />
+    <title>Dish Collect — 디시 컬렉트</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app" id="app">
+      <header class="topbar" aria-label="게임 현황">
+        <div class="brand" aria-label="Dish Collect, 디시 컬렉트">
+          <span class="brand__eyebrow">SKY KITCHEN № 08</span>
+          <h1>DISH<br /><em>COLLECT</em></h1>
+        </div>
+
+        <div class="stats">
+          <div class="stat stat--time" id="time-stat">
+            <span>남은 시간</span>
+            <strong id="time-value">40</strong>
+          </div>
+          <div class="stat">
+            <span>점수</span>
+            <strong id="score-value">0</strong>
+          </div>
+          <div class="stat">
+            <span>서빙</span>
+            <strong id="progress-value">0/4</strong>
+          </div>
+        </div>
+
+        <button class="icon-button" id="mute-button" type="button" aria-label="소리 끄기" aria-pressed="false">
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <path d="M4 9v6h4l5 4V5L8 9H4Z" />
+            <path class="sound-waves" d="M16 9.2c.8.7 1.2 1.7 1.2 2.8s-.4 2.1-1.2 2.8M18.7 6.7A7.4 7.4 0 0 1 21 12a7.4 7.4 0 0 1-2.3 5.3" />
+            <path class="sound-slash" d="m5 4 14 16" />
+          </svg>
+        </button>
+      </header>
+
+      <section class="game-layout" aria-label="디시 컬렉트 게임 영역">
+        <section class="sky-panel" aria-label="현재 요리">
+          <div class="cloud cloud--one" aria-hidden="true"></div>
+          <div class="cloud cloud--two" aria-hidden="true"></div>
+          <div class="sunburst" aria-hidden="true"></div>
+
+          <div class="course-ribbon">
+            <span id="course-kicker">오늘의 첫 접시</span>
+            <strong id="course-name">베이컨 브런치</strong>
+          </div>
+
+          <div class="plate-wrap" id="plate-wrap" aria-label="수집한 재료가 담기는 접시">
+            <div class="plate">
+              <div class="plate__rim"></div>
+              <div class="plated-items" id="plated-items"></div>
+              <span class="plate__mark" id="plate-mark">READY</span>
+            </div>
+            <div class="plate-shadow" aria-hidden="true"></div>
+          </div>
+
+          <div class="served-dots" id="served-dots" aria-label="완성한 접시 0개"></div>
+
+          <aside class="next-card" id="next-card" aria-label="다음 요리">
+            <span>다음 접시</span>
+            <div class="next-card__icon" id="next-icon" aria-hidden="true"></div>
+            <strong id="next-name">카페 세트</strong>
+          </aside>
+        </section>
+
+        <section class="work-panel">
+          <div class="ticket" aria-labelledby="recipe-title">
+            <div class="ticket__heading">
+              <div>
+                <span class="ticket__label">ORDER TICKET</span>
+                <h2 id="recipe-title">필요한 재료</h2>
+              </div>
+              <span class="combo-badge" id="combo-badge" aria-label="콤보 0">COMBO ×0</span>
+            </div>
+            <ul class="needs" id="needs-list"></ul>
+          </div>
+
+          <div class="message-bar" id="message-bar">
+            <span class="message-bar__spark" aria-hidden="true">✦</span>
+            <p id="status-message">접시에 필요한 재료를 찾아 탭하세요.</p>
+            <button class="resume-button" id="resume-button" type="button" hidden>계속하기</button>
+          </div>
+
+          <div
+            class="ingredient-board"
+            id="ingredient-board"
+            role="grid"
+            aria-label="식재료 보드, 방향키로 이동하고 엔터 또는 스페이스로 선택"
+            aria-rowcount="8"
+            aria-colcount="6"
+          ></div>
+
+          <div class="controls">
+            <button class="control-button control-button--hint" id="hint-button" type="button" disabled>
+              <span aria-hidden="true">✦</span>
+              <span><strong>힌트</strong><small id="hint-state">6초 뒤 사용 가능</small></span>
+            </button>
+            <div class="legend" aria-label="조작 안내">
+              <span><kbd>↕↔</kbd> 이동</span>
+              <span><kbd>H</kbd> 힌트</span>
+              <span><kbd>M</kbd> 소리</span>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <section class="start-screen" id="start-screen" aria-labelledby="start-title">
+        <div class="start-card">
+          <p class="start-card__stamp">NEW ORDER · 4 PLATES</p>
+          <div class="start-card__dish" aria-hidden="true">
+            <span>✦</span>
+          </div>
+          <p class="start-card__eyebrow">하늘 주방에 주문이 들어왔어요!</p>
+          <h2 id="start-title">필요한 재료만<br />쏙쏙 골라 담으세요</h2>
+          <ol class="how-to">
+            <li><b>01</b><span>접시 아래 주문표를 확인해요.</span></li>
+            <li><b>02</b><span>보드에서 필요한 재료만 찾아요.</span></li>
+            <li><b>03</b><span>40초 안에 네 접시를 완성해요.</span></li>
+          </ol>
+          <label class="comfort-toggle">
+            <input id="comfort-mode" type="checkbox" />
+            <span class="comfort-toggle__control" aria-hidden="true"></span>
+            <span><strong>여유 모드</strong><small>시간 제한과 오답 페널티 없이 연습</small></span>
+          </label>
+          <button class="primary-button" id="start-button" type="button">
+            주문 시작하기 <span aria-hidden="true">→</span>
+          </button>
+          <p class="start-card__note">마우스 · 터치 · 키보드 모두 지원</p>
+        </div>
+      </section>
+
+      <section class="result-screen" id="result-screen" role="dialog" aria-modal="true" aria-labelledby="result-title" hidden>
+        <div class="result-card">
+          <div class="result-confetti" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <p class="result-kicker" id="result-kicker">ORDER COMPLETE</p>
+          <h2 id="result-title" tabindex="-1">네 접시 완성!</h2>
+          <p class="result-copy" id="result-copy">하늘 주방의 오늘 주문을 모두 완성했어요.</p>
+          <div class="result-plates" id="result-plates" aria-hidden="true"></div>
+          <dl class="result-stats">
+            <div><dt>최종 점수</dt><dd id="result-score">0</dd></div>
+            <div><dt>걸린 시간</dt><dd id="result-time">0초</dd></div>
+            <div><dt>완성 접시</dt><dd id="result-progress">4/4</dd></div>
+            <div><dt>실수</dt><dd id="result-misses">0회</dd></div>
+          </dl>
+          <button class="primary-button" id="replay-button" type="button">다시 만들기 <span aria-hidden="true">↻</span></button>
+          <a class="gallery-link" href="../../index.html">다른 게임 둘러보기</a>
+        </div>
+      </section>
+
+      <div class="sr-only" id="announcer" aria-live="polite" aria-atomic="true"></div>
+      <div class="test-badge" id="test-badge" hidden>SELF TEST</div>
+      <noscript>이 게임을 플레이하려면 JavaScript를 켜주세요.</noscript>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<title>퍼펙트 슬라이스 — 균등 분할 챌린지</title>
+<meta name="description" content="칼을 좌우로 조준해 오이를 5번 잘라 6조각으로 나누는 정확도 챌린지 데모.">
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<main class="shell" id="shell" aria-labelledby="gameTitle">
+
+  <header class="hud">
+    <div class="hud-id">
+      <h1 id="gameTitle">퍼펙트 슬라이스</h1>
+      <p class="hud-sub">균등 분할 챌린지</p>
+    </div>
+    <div class="hud-stats">
+      <div class="timer" id="timer" title="남은 시간">
+        <svg viewBox="0 0 40 40" aria-hidden="true" focusable="false">
+          <circle class="ring-bg" cx="20" cy="20" r="16"></circle>
+          <circle class="ring-fg" id="timerRing" cx="20" cy="20" r="16"></circle>
+        </svg>
+        <span class="timer-num" id="timerNum">25</span>
+        <span class="visually-hidden" id="timerText">남은 시간 25초</span>
+      </div>
+      <p class="cuts" id="cutsLabel">남은 칼질 <b id="cutsNum">5</b><span aria-hidden="true">/5</span></p>
+      <button type="button" class="icon-btn" id="muteBtn" aria-pressed="false">소리 켜기</button>
+    </div>
+  </header>
+
+  <section class="stage" id="stage" aria-label="도마">
+    <div class="board">
+      <div class="sticker" id="sticker" data-state="idle">
+        <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+          <circle cx="32" cy="32" r="30" class="st-disc"></circle>
+          <path class="st-star" d="M32 14l5.3 11.4L49.5 27l-9 8.9 2.2 12.6L32 42.5 21.3 48.5l2.2-12.6-9-8.9 12.2-1.6z"></path>
+        </svg>
+        <span class="sticker-cap" id="stickerCap">심사</span>
+      </div>
+
+      <div class="cuke-wrap" id="cukeWrap">
+
+        <svg class="cuke" id="cukeSvg" viewBox="0 0 600 190" aria-hidden="true" focusable="false">
+          <defs>
+            <linearGradient id="psSkin" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#8fce5b"></stop>
+              <stop offset="38%" stop-color="#5da53a"></stop>
+              <stop offset="100%" stop-color="#2f6b2c"></stop>
+            </linearGradient>
+            <linearGradient id="psFace" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#f3fbe2"></stop>
+              <stop offset="100%" stop-color="#d5eab0"></stop>
+            </linearGradient>
+            <pattern id="psStripe" width="26" height="190" patternUnits="userSpaceOnUse">
+              <rect x="0" y="0" width="9" height="190" fill="#ffffff" opacity="0.10"></rect>
+            </pattern>
+
+            <g id="psCukeArt">
+              <rect x="0" y="24" width="600" height="140" rx="70" fill="url(#psSkin)"></rect>
+              <rect x="0" y="24" width="600" height="140" rx="70" fill="url(#psStripe)"></rect>
+              <ellipse cx="300" cy="56" rx="284" ry="14" fill="#e4f6bd" opacity="0.40"></ellipse>
+              <ellipse cx="300" cy="148" rx="284" ry="9" fill="#1d4a1c" opacity="0.30"></ellipse>
+              <rect x="0" y="24" width="600" height="140" rx="70" fill="none" stroke="#255c24" stroke-width="3" opacity="0.55"></rect>
+            </g>
+          </defs>
+
+          <ellipse class="cuke-shadow" cx="300" cy="174" rx="292" ry="13"></ellipse>
+          <g id="pieces"></g>
+          <g id="particles" aria-hidden="true"></g>
+        </svg>
+
+        <div class="guides" id="guides" aria-hidden="true"></div>
+        <div class="aim" id="aim" aria-hidden="true"></div>
+
+        <div class="knife" id="knife" role="slider" tabindex="0"
+             aria-label="칼 위치" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"
+             aria-valuetext="50퍼센트 지점" aria-describedby="knifeHelp">
+          <svg viewBox="0 0 64 150" aria-hidden="true" focusable="false">
+            <rect class="kn-handle" x="24" y="4" width="16" height="52" rx="7"></rect>
+            <rect class="kn-collar" x="21" y="54" width="22" height="8" rx="3"></rect>
+            <path class="kn-blade" d="M26 60h12l6 74a4 4 0 0 1-4 4h-16a4 4 0 0 1-4-4z"></path>
+            <path class="kn-edge" d="M26 60h4l-2 78h-6z"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <p class="hint" id="hint">5번 잘라 6조각을 똑같이 만들어 보세요.</p>
+    <p class="score-slot"><span class="score-label">정확도</span> <span class="score-value" id="scoreValue">—</span></p>
+    <div class="actions">
+      <button type="button" class="btn btn-primary" id="primaryBtn">시작</button>
+      <a class="btn btn-ghost" id="ctaLink" href="../../index.html">다른 데모 보기</a>
+    </div>
+    <p class="help" id="knifeHelp">칼을 좌우로 끌었다 놓으면 잘립니다. 키보드는 방향키로 이동하고 스페이스로 자릅니다.</p>
+  </section>
+
+  <div class="result" id="result" hidden>
+    <div class="result-card" role="dialog" aria-modal="false" aria-labelledby="resultTitle" aria-describedby="resultDesc">
+      <p class="result-grade" id="resultGrade">—</p>
+      <h2 class="result-title" id="resultTitle">결과</h2>
+      <p class="result-score"><b id="resultScore">0</b><span>점</span></p>
+      <p class="result-desc" id="resultDesc"></p>
+      <p class="result-best">최고 점수 <b id="bestScore">0</b>점</p>
+      <div class="actions">
+        <button type="button" class="btn btn-primary" id="retryBtn">다시 자르기</button>
+        <a class="btn btn-ghost" href="../../index.html">다른 데모 보기</a>
+      </div>
+    </div>
+  </div>
+
+  <p class="visually-hidden" id="live" role="status" aria-live="polite"></p>
+</main>
+<script src="./script.js"></script>
+</body>
+</html>

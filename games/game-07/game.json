@@ -1,0 +1,25 @@
+{
+  "index": 7,
+  "dir": "game-07",
+  "slug": "kitchen-tidy",
+  "title": "키친 타이디",
+  "titleEn": "Kitchen Tidy",
+  "type": "A — 탭 매칭",
+  "group": "after-1m45",
+  "sourceTimestamp": "01:52",
+  "entry": "index.html",
+  "orientation": "portrait",
+  "sessionSeconds": [25, 45],
+  "summary": "주방 바닥에 흩어진 조리도구 24개(8종×3개)를 탭해 7칸 바구니에 모으고, 같은 종류 3개가 모이면 정리한다. 35초 안에 8세트를 모두 치우면 성공.",
+  "controls": ["pointer tap", "touch tap", "keyboard Tab/arrows + Enter/Space"],
+  "assets": "전량 오리지널 인라인 SVG · CSS. 외부 이미지·웹폰트·CDN·음원 0건.",
+  "queryParams": {
+    "seed": "동일 배치 재현 (재시작해도 유지)",
+    "test": "1 이면 순수 함수·렌더 불변식 자동 검증 실행",
+    "relax": "1 이면 여유 모드(제한 시간 없음)로 시작"
+  },
+  "shortcuts": { "H": "힌트", "M": "음소거", "R": "결과 화면에서 재시작" },
+  "estimate": { "quoteKrw": [4500000, 6500000], "businessDays": [5, 7], "personDays": 6.5 },
+  "plan": "outputs/plans/kitchen-tidy.md",
+  "verification": "outputs/verify-kitchen-tidy.mjs"
+}

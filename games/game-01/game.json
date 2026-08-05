@@ -1,0 +1,18 @@
+{
+  "index": 1,
+  "dir": "game-01",
+  "slug": "order-tray",
+  "title": "오더 트레이",
+  "titleEn": "Order Tray",
+  "type": "B — 보드상태 퍼즐",
+  "group": "six-second",
+  "sourceTimestamp": "00:06",
+  "entry": "index.html",
+  "orientation": "portrait",
+  "sessionSeconds": [30, 45],
+  "summary": "주문표가 요구하는 요리를 4×4 보드에서 골라 트레이로 보내고, 같은 요리 3개를 모아 주문을 완료한다.",
+  "controls": ["pointer tap", "touch tap", "keyboard arrows + Enter/Space"],
+  "assets": "전량 오리지널 인라인 SVG · CSS. 외부 이미지·웹폰트·CDN·음원 0건.",
+  "queryParams": { "seed": "동일 보드 재현", "test": "1 이면 순수 함수 자동 검증 실행" },
+  "plan": "outputs/plans/order-tray.md"
+}

@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#123a63">
+<meta name="description" content="주문표가 요구하는 요리를 보드에서 골라 트레이로 보내는 30~45초 세로형 HTML5 미니게임.">
+<title>오더 트레이 · Order Tray</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="scene" aria-hidden="true">
+  <span class="petal p1"></span><span class="petal p2"></span><span class="petal p3"></span>
+  <span class="petal p4"></span><span class="petal p5"></span><span class="petal p6"></span>
+</div>
+
+<main class="app" id="app">
+
+  <header class="hd">
+    <p class="wordmark"><b>ORDER</b><i>TRAY</i></p>
+    <div class="hd-tools">
+      <p class="coin" id="coinBox">
+        <svg class="coin-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <circle cx="12" cy="12" r="9.5" fill="#f5b93b" stroke="#a9701a" stroke-width="1.6"/>
+          <circle cx="12" cy="12" r="6" fill="none" stroke="#a9701a" stroke-width="1.2"/>
+          <path d="M9.6 9.4h4.8M9.6 12h4.8M9.6 14.6h4.8" stroke="#a9701a" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+        <span class="sr-only">획득 코인</span>
+        <span class="coin-num" id="coinValue">0</span>
+      </p>
+      <button class="icon-btn" id="muteBtn" type="button" aria-pressed="false">
+        <span class="sr-only">효과음 끄기 (단축키 M)</span>
+        <svg class="mute-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M4 9.5h3.5L12 5.5v13L7.5 14.5H4z" fill="currentColor"/>
+          <path class="wave" d="M15.2 9.2a4 4 0 0 1 0 5.6M17.8 6.8a7.6 7.6 0 0 1 0 10.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          <path class="cross" d="M15.5 9.5l5 5m0-5l-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <section class="orders" aria-labelledby="ordersTitle">
+    <div class="orders-top">
+      <h2 id="ordersTitle">ORDERS</h2>
+      <p class="orders-count"><span id="doneCount">0</span> / <span id="totalCount">5</span> 주문</p>
+    </div>
+    <ul class="tickets" id="ticketList"></ul>
+    <p class="queue" id="queueInfo">대기 주문 2장</p>
+  </section>
+
+  <section class="stage" aria-labelledby="boardTitle">
+    <h2 id="boardTitle" class="sr-only">요리 보드</h2>
+
+    <div class="timer" id="timerBox">
+      <div class="timer-bar"><span class="timer-fill" id="timerFill"></span></div>
+      <p class="timer-num"><span class="sr-only">남은 시간</span><span id="timerValue">40.0</span>초</p>
+    </div>
+
+    <div class="board" id="board" role="group" aria-label="요리 보드, 4행 4열"></div>
+
+    <div class="tray-wrap">
+      <div class="tray-head">
+        <p class="tray-title">트레이</p>
+        <p class="tray-left" id="trayLeft">여유 6칸</p>
+      </div>
+      <div class="conveyor">
+        <ul class="tray" id="tray" aria-label="트레이"></ul>
+        <span class="arrow a1" aria-hidden="true"></span>
+        <span class="arrow a2" aria-hidden="true"></span>
+        <span class="arrow a3" aria-hidden="true"></span>
+      </div>
+    </div>
+  </section>
+
+  <p class="hint" id="hint">주문에 맞는 요리를 눌러 트레이로 보내세요. 같은 요리 3개를 모으면 주문이 완료됩니다.</p>
+
+  <footer class="foot">
+    <p>방향키 이동 · Enter/Space 전송 · R 다시하기 · M 음소거</p>
+  </footer>
+
+  <p class="sr-only" id="live" role="status" aria-live="polite"></p>
+</main>
+
+<div class="fx" id="fx" aria-hidden="true"></div>
+
+<div class="overlay" id="pause" hidden>
+  <div class="panel">
+    <h2>일시정지</h2>
+    <p>다른 화면으로 이동해 라운드를 멈췄습니다.</p>
+    <button class="btn primary" id="resumeBtn" type="button">이어서 하기</button>
+  </div>
+</div>
+
+<div class="overlay" id="result" hidden role="dialog" aria-modal="true" aria-labelledby="resultTitle">
+  <div class="panel result-panel">
+    <p class="result-badge" id="resultBadge">완료</p>
+    <h2 id="resultTitle" tabindex="-1">주문 마감!</h2>
+    <p class="result-lead" id="resultLead"></p>
+    <dl class="result-stats">
+      <div><dt>획득 코인</dt><dd id="rCoins">0</dd></div>
+      <div><dt>완료 주문</dt><dd id="rOrders">0 / 5</dd></div>
+      <div><dt>남은 시간</dt><dd id="rTime">0.0초</dd></div>
+      <div><dt>최고 콤보</dt><dd id="rCombo">×1.0</dd></div>
+    </dl>
+    <div class="result-cta">
+      <button class="btn primary" id="replayBtn" type="button">다시 주문받기</button>
+      <button class="btn ghost" id="moreBtn" type="button">다른 데모 보기</button>
+    </div>
+    <p class="more-note" id="moreNote" hidden>이 데모는 8종 패키지 중 <b>1번 오더 트레이</b>입니다. 나머지 7종은 패키지 첫 화면에서 볼 수 있습니다.</p>
+    <p class="result-note">코인 산식·콤보 배수·트레이 칸수·제한 시간은 원본 영상에 근거가 없어 본 프로토타입이 독자 설계한 값입니다. 아이콘·배경·효과음은 전량 오리지널로 제작했습니다.</p>
+  </div>
+</div>
+
+<noscript>
+  <p class="noscript">이 게임은 자바스크립트로 동작합니다. 브라우저에서 자바스크립트를 켠 뒤 다시 열어 주세요.</p>
+</noscript>
+
+<script src="script.js"></script>
+</body>
+</html>

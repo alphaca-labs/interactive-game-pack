@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#183a37">
+  <meta name="description" content="세 조리대를 운영해 45초 안에 목표 매출을 달성하는 한 손 레스토랑 게임">
+  <title>러시 카운터 — Rush Counter</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="backdrop" aria-hidden="true">
+    <i class="awning-stripe stripe-a"></i>
+    <i class="awning-stripe stripe-b"></i>
+    <i class="awning-stripe stripe-c"></i>
+    <i class="window-glow"></i>
+  </div>
+
+  <main class="game-shell" id="gameShell" aria-labelledby="gameTitle">
+    <header class="topbar">
+      <div class="brand-lockup">
+        <span class="brand-kicker">LUNCH SHIFT · 45 SEC</span>
+        <h1 id="gameTitle"><span>RUSH</span> COUNTER</h1>
+      </div>
+      <div class="top-actions">
+        <button class="icon-button" id="muteButton" type="button" aria-label="소리 끄기" aria-pressed="false">
+          <svg class="speaker-icon" viewBox="0 0 28 28" aria-hidden="true">
+            <path d="M4 11h5l6-5v16l-6-5H4z" fill="currentColor"/>
+            <path class="sound-wave" d="M19 10c1.7 2.2 1.7 5.8 0 8M22 7c3.4 3.8 3.4 10.2 0 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path class="mute-cross" d="m19 10 6 8m0-8-6 8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <button class="icon-button" id="pauseButton" type="button" aria-label="게임 일시정지">
+          <svg viewBox="0 0 28 28" aria-hidden="true"><path d="M7 5h5v18H7zm9 0h5v18h-5z" fill="currentColor"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <section class="hud" aria-label="게임 현황">
+      <div class="cash-meter" id="cashMeter">
+        <div class="cash-label"><span>수거 매출</span><b><span id="bankedCash">0</span><small>/160</small></b></div>
+        <div class="meter-track" aria-hidden="true"><i id="cashFill"></i></div>
+      </div>
+      <div class="timer-card" id="timerCard" aria-label="남은 시간 45초">
+        <svg viewBox="0 0 52 52" aria-hidden="true">
+          <circle class="timer-rail" cx="26" cy="26" r="21"></circle>
+          <circle class="timer-ring" id="timerRing" cx="26" cy="26" r="21"></circle>
+        </svg>
+        <strong id="timeValue">45</strong><span>SEC</span>
+      </div>
+      <div class="miss-card">
+        <span>놓침</span>
+        <div class="miss-marks" id="missMarks" aria-label="놓친 손님 0명, 최대 3명">
+          <i></i><i></i><i></i>
+        </div>
+      </div>
+    </section>
+
+    <section class="customer-zone" aria-labelledby="queueTitle">
+      <div class="zone-heading">
+        <div><span class="eyebrow">NOW SERVING</span><h2 id="queueTitle">오늘의 러시</h2></div>
+        <span class="queue-count" id="queueCount">대기 2</span>
+      </div>
+
+      <div class="customer-stage" id="customerStage">
+        <div class="queue-figures" id="queueFigures" aria-hidden="true"></div>
+        <div class="active-customer" id="activeCustomer" aria-hidden="true">
+          <div class="customer-head"><i class="hair"></i><i class="ear left"></i><i class="ear right"></i><i class="face"><b></b><b></b><em></em></i></div>
+          <div class="customer-body"></div>
+        </div>
+        <article class="order-ticket" id="orderTicket" aria-live="polite">
+          <span class="ticket-notch n1" aria-hidden="true"></span><span class="ticket-notch n2" aria-hidden="true"></span>
+          <div class="ticket-top"><span>ORDER #<b id="orderNumber">01</b></span><strong id="patienceText">12.0초</strong></div>
+          <div class="order-items" id="orderItems"></div>
+          <div class="patience-row"><span>기다림</span><div class="patience-track"><i id="patienceFill"></i></div></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="counter-zone" aria-label="보관대와 계산대">
+      <div class="inventory" id="inventory">
+        <div class="inventory-item" data-food="burger">
+          <span class="mini-food burger-art" aria-hidden="true"><i></i><b></b><em></em></span>
+          <span>버거</span><strong id="inventoryBurger">0/2</strong>
+        </div>
+        <div class="inventory-item" data-food="fries">
+          <span class="mini-food fries-art" aria-hidden="true"><i></i><b></b><em></em></span>
+          <span>감자</span><strong id="inventoryFries">0/2</strong>
+        </div>
+        <div class="inventory-item" data-food="drink">
+          <span class="mini-food drink-art" aria-hidden="true"><i></i><b></b><em></em></span>
+          <span>음료</span><strong id="inventoryDrink">0/2</strong>
+        </div>
+      </div>
+      <div class="counter-actions">
+        <button class="serve-button" id="serveButton" type="button" disabled aria-describedby="serveHint">
+          <span>SERVE</span><small>주문 내보내기 · Space</small>
+        </button>
+        <button class="cash-button" id="cashButton" type="button" disabled>
+          <span class="cash-stack" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span><b id="pendingCash">현금 없음</b><small id="bundleCount">계산대 · C</small></span>
+        </button>
+      </div>
+      <p class="serve-hint" id="serveHint">첫 주문에 필요한 음식을 준비하세요.</p>
+    </section>
+
+    <section class="kitchen-zone" aria-labelledby="kitchenTitle">
+      <div class="kitchen-heading"><span class="eyebrow">HOT LINE</span><h2 id="kitchenTitle">조리대</h2></div>
+      <div class="stations" id="stations">
+        <button class="station station-burger tutorial-pulse" data-station="burger" type="button" aria-describedby="status-burger">
+          <span class="keycap">1</span>
+          <span class="station-art grill-art" aria-hidden="true"><i class="grill-back"></i><i class="patty"></i><i class="grill-line l1"></i><i class="grill-line l2"></i><i class="grill-line l3"></i><i class="smoke s1"></i><i class="smoke s2"></i></span>
+          <span class="station-name">버거 그릴</span>
+          <span class="station-status" id="status-burger">탭해서 굽기</span>
+          <span class="station-progress" aria-hidden="true"><i></i></span>
+        </button>
+        <button class="station station-fries" data-station="fries" type="button" aria-describedby="status-fries">
+          <span class="keycap">2</span>
+          <span class="station-art fryer-art" aria-hidden="true"><i class="basket"></i><i class="fry f1"></i><i class="fry f2"></i><i class="fry f3"></i><i class="bubble b1"></i><i class="bubble b2"></i></span>
+          <span class="station-name">감자 튀김기</span>
+          <span class="station-status" id="status-fries">탭해서 튀기기</span>
+          <span class="station-progress" aria-hidden="true"><i></i></span>
+        </button>
+        <button class="station station-drink tutorial-pulse delay" data-station="drink" type="button" aria-describedby="status-drink">
+          <span class="keycap">3</span>
+          <span class="station-art soda-art" aria-hidden="true"><i class="machine"></i><i class="nozzle"></i><i class="cup"></i><i class="liquid"></i></span>
+          <span class="station-name">음료 머신</span>
+          <span class="station-status" id="status-drink">탭해서 따르기</span>
+          <span class="station-progress" aria-hidden="true"><i></i></span>
+        </button>
+      </div>
+    </section>
+
+    <div class="status-strip" id="statusStrip" role="status" aria-live="polite">
+      <i aria-hidden="true"></i><span id="statusText">버거와 음료부터 준비해 볼까요?</span>
+    </div>
+    <p class="keyboard-help">키보드: <kbd>1</kbd><kbd>2</kbd><kbd>3</kbd> 조리 · <kbd>Space</kbd> 서빙 · <kbd>C</kbd> 수거 · <kbd>P</kbd> 일시정지</p>
+  </main>
+
+  <div class="fx-layer" id="fxLayer" aria-hidden="true"></div>
+  <div class="sr-only" id="liveRegion" aria-live="polite" aria-atomic="true"></div>
+
+  <section class="overlay intro-overlay" id="introOverlay" role="dialog" aria-modal="true" aria-labelledby="introTitle">
+    <div class="modal-card intro-card">
+      <span class="modal-ticket">TODAY'S SPECIAL</span>
+      <div class="intro-mark" aria-hidden="true"><i class="plate"></i><i class="fork"></i><i class="knife"></i></div>
+      <p class="modal-kicker">45 SECOND RESTAURANT RUSH</p>
+      <h2 id="introTitle">주문 받고,<br><em>현금까지</em> 챙기세요!</h2>
+      <p class="intro-copy">조리대를 두 번 탭하면 요리가 보관대에 담겨요. 주문을 서빙한 뒤 계산대의 현금을 꼭 수거하세요.</p>
+      <ul class="rules">
+        <li><b>160</b><span>목표 코인</span></li>
+        <li><b>45</b><span>제한 시간</span></li>
+        <li><b>3</b><span>놓치면 종료</span></li>
+      </ul>
+      <button class="primary-button" id="startButton" type="button"><span>점심 장사 시작</span><i aria-hidden="true">→</i></button>
+      <p class="tiny-note">오리지널 HTML5 데모 · 외부 에셋 없음</p>
+    </div>
+  </section>
+
+  <section class="overlay pause-overlay" id="pauseOverlay" role="dialog" aria-modal="true" aria-labelledby="pauseTitle" hidden>
+    <div class="modal-card compact-card">
+      <span class="modal-kicker">BREAK TIME</span>
+      <h2 id="pauseTitle">잠시 쉬는 중</h2>
+      <p>시간과 조리는 그대로 멈춰 있어요.</p>
+      <button class="primary-button" id="resumeButton" type="button"><span>계속 운영하기</span><i aria-hidden="true">→</i></button>
+    </div>
+  </section>
+
+  <section class="overlay result-overlay" id="resultOverlay" role="dialog" aria-modal="true" aria-labelledby="resultTitle" hidden>
+    <div class="modal-card result-card">
+      <span class="modal-ticket" id="resultTicket">SHIFT COMPLETE</span>
+      <div class="stars" id="resultStars" aria-label="별 1개"><i>★</i><i>★</i><i>★</i></div>
+      <p class="modal-kicker" id="resultKicker">오늘의 매출</p>
+      <h2 id="resultTitle">러시 성공!</h2>
+      <p class="result-lead" id="resultLead">계산대까지 완벽하게 챙겼어요.</p>
+      <dl class="result-stats">
+        <div><dt>수거 매출</dt><dd><span id="resultCash">0</span> C</dd></div>
+        <div><dt>서빙</dt><dd><span id="resultServed">0</span> 명</dd></div>
+        <div><dt>최고 연속</dt><dd><span id="resultStreak">0</span> 회</dd></div>
+        <div><dt>미수거</dt><dd><span id="resultPending">0</span> C</dd></div>
+      </dl>
+      <button class="primary-button" id="restartButton" type="button"><span>다시 장사하기</span><i aria-hidden="true">↻</i></button>
+    </div>
+  </section>
+
+  <noscript>이 게임은 JavaScript를 켜야 플레이할 수 있습니다.</noscript>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#f2e3d2">
+<meta name="description" content="주방 바닥에 흩어진 조리도구를 탭해 같은 종류 3개씩 정리하는 35초 세로형 HTML5 미니게임.">
+<title>키친 타이디 · Kitchen Tidy</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<main class="app" id="app">
+
+  <header class="hd">
+    <p class="wordmark"><b>KITCHEN</b><i>TIDY</i></p>
+
+    <div class="hd-stats">
+      <p class="stat time" id="timeBox">
+        <span class="stat-k">남은 시간</span>
+        <span class="stat-v"><span id="timeValue">35</span><small>초</small></span>
+      </p>
+      <p class="stat">
+        <span class="stat-k">점수</span>
+        <span class="stat-v" id="scoreValue">0</span>
+      </p>
+      <p class="stat">
+        <span class="stat-k">정리</span>
+        <span class="stat-v"><span id="setsValue">0</span><small>/8</small></span>
+      </p>
+    </div>
+
+    <div class="hd-tools">
+      <button class="chip" id="hintBtn" type="button" disabled>
+        힌트<span class="chip-sub" id="hintSub">(-100)</span>
+      </button>
+      <button class="icon-btn" id="muteBtn" type="button" aria-pressed="false">
+        <span class="sr-only">효과음 끄기 (단축키 M)</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M4 9.5h3.5L12 5.5v13L7.5 14.5H4z" fill="currentColor"/>
+          <path class="wave" d="M15.2 9.2a4 4 0 0 1 0 5.6M17.8 6.8a7.6 7.6 0 0 1 0 10.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          <path class="cross" d="M15.5 9.5l5 5m0-5l-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <section class="stage" aria-labelledby="floorTitle">
+    <h2 id="floorTitle" class="sr-only">주방 바닥</h2>
+
+    <div class="kitchen" aria-hidden="true">
+      <span class="window"></span>
+      <span class="shelf"></span>
+      <span class="counter"></span>
+      <span class="sink"></span>
+      <span class="stove"></span>
+    </div>
+
+    <div class="floor" id="floor" role="group" aria-label="주방 바닥, 6행 4열의 조리도구"></div>
+  </section>
+
+  <p class="status" id="status">같은 조리도구 3개를 모아 정리하세요.</p>
+
+  <section class="basket-wrap" aria-labelledby="basketTitle">
+    <div class="basket-head">
+      <h2 id="basketTitle">정리 바구니</h2>
+      <p class="basket-count"><span id="basketNum">0</span> / 7</p>
+    </div>
+    <ul class="basket" id="basket" aria-hidden="true"></ul>
+    <p class="sr-only" id="basketSummary">바구니가 비어 있습니다. 총 0/7.</p>
+  </section>
+
+  <footer class="foot">
+    <p>Tab·방향키 이동 · Enter/Space 정리 · H 힌트 · M 음소거 · R 다시하기</p>
+  </footer>
+
+  <p class="sr-only" id="live" role="status" aria-live="polite"></p>
+</main>
+
+<div class="fx" id="fx" aria-hidden="true"></div>
+
+<div class="overlay" id="start" role="dialog" aria-modal="true" aria-labelledby="startTitle">
+  <div class="panel">
+    <p class="badge">8종 데모 패키지 · 07</p>
+    <h2 id="startTitle" tabindex="-1">키친 타이디</h2>
+    <p class="lead">아침 주방 바닥에 조리도구 24개가 흩어졌습니다. 같은 도구 <b>3개</b>를 바구니에 모으면 정리됩니다. 바구니 <b>7칸</b>이 다 차기 전에 <b>8세트</b>를 모두 치우세요.</p>
+    <label class="toggle">
+      <input type="checkbox" id="relaxCheck">
+      <span><b>여유 모드</b> — 제한 시간 없이 연습합니다.</span>
+    </label>
+    <div class="cta">
+      <button class="btn primary" id="startBtn" type="button">정리 시작</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="pause" hidden role="dialog" aria-modal="true" aria-labelledby="pauseTitle">
+  <div class="panel">
+    <h2 id="pauseTitle" tabindex="-1">일시정지</h2>
+    <p class="lead">다른 화면으로 이동해 타이머를 멈췄습니다.</p>
+    <div class="cta">
+      <button class="btn primary" id="resumeBtn" type="button">계속하기</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="result" hidden role="dialog" aria-modal="true" aria-labelledby="resultTitle">
+  <div class="panel result-panel">
+    <p class="badge" id="resultBadge">정리 완료</p>
+    <h2 id="resultTitle" tabindex="-1">주방이 깨끗해졌어요!</h2>
+    <p class="lead" id="resultLead"></p>
+    <ul class="result-basket" id="resultBasket" hidden aria-label="종료 시 바구니 구성"></ul>
+    <dl class="result-stats">
+      <div><dt>점수</dt><dd id="rScore">0</dd></div>
+      <div><dt>정리한 세트</dt><dd id="rSets">0 / 8</dd></div>
+      <div><dt>소요 시간</dt><dd id="rTime">0.0초</dd></div>
+    </dl>
+    <p class="result-sub" id="rBreak"></p>
+    <div class="cta">
+      <button class="btn primary" id="replayBtn" type="button">다시 정리하기</button>
+      <a class="btn ghost" id="moreLink" href="../../index.html">다른 데모 보기</a>
+    </div>
+    <p class="note">3개 매칭·7칸 바구니·35초 제한·점수 산식은 원본 영상에서 확인되지 않아 본 프로토타입이 독자 설계한 값입니다. 아이콘·배경·효과음은 전량 오리지널이며 외부 이미지·폰트·음원 요청은 0건입니다.</p>
+  </div>
+</div>
+
+<noscript>
+  <p class="noscript">이 게임은 자바스크립트로 동작합니다. 브라우저에서 자바스크립트를 켠 뒤 다시 열어 주세요.</p>
+</noscript>
+
+<script src="script.js"></script>
+</body>
+</html>

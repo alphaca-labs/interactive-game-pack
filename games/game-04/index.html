@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#101d2e">
+<title>윈터 팬트리 — 겨울 산장 재료 찾기</title>
+<meta name="description" content="눈 내리는 산장 식료품 저장고에서 30초 안에 목표 재료 5개를 찾아내는 탭 매칭 데모.">
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+<svg id="sprite" aria-hidden="true" focusable="false" width="0" height="0" style="position:absolute"><defs id="spriteDefs"></defs></svg>
+
+<main class="shell" id="shell" aria-labelledby="gameTitle" data-phase="BOOT">
+
+  <div class="snow" id="snow" aria-hidden="true"></div>
+
+  <header class="cabin">
+    <div class="cabin-window" aria-hidden="true">
+      <span class="pane"></span><span class="pane"></span>
+      <span class="pane"></span><span class="pane"></span>
+    </div>
+    <div class="cabin-id">
+      <h1 id="gameTitle">윈터 팬트리</h1>
+      <p class="cabin-sub">겨울 산장 재료 찾기</p>
+    </div>
+    <button type="button" class="icon-btn" id="muteBtn" aria-pressed="false">소리 켜기</button>
+  </header>
+
+  <section class="hud" aria-label="목표와 진행 상황">
+    <div class="goal" id="goal">
+      <div class="goal-icon" id="goalIcon" aria-hidden="true"></div>
+      <div class="goal-text">
+        <p class="goal-label">찾을 재료</p>
+        <p class="goal-name" id="goalName">준비 중</p>
+        <p class="goal-count">수집 <b id="foundNum">0</b><span aria-hidden="true">/5</span></p>
+      </div>
+    </div>
+
+    <div class="meters">
+      <div class="meter meter-time">
+        <div class="meter-head">
+          <span>남은 시간</span>
+          <b id="timeNum">30.0초</b>
+        </div>
+        <div class="bar" role="presentation"><i id="timeFill" style="--p:1"></i></div>
+      </div>
+      <div class="meter-row">
+        <p class="chip">점수 <b id="scoreNum">0</b></p>
+        <p class="chip" id="comboChip">콤보 <b id="comboNum">×1.00</b></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="pantry" aria-labelledby="pantryLabel">
+    <h2 id="pantryLabel" class="visually-hidden">식료품 선반 5열 4행</h2>
+    <div class="shelf" id="board" role="group" aria-labelledby="pantryLabel"></div>
+  </section>
+
+  <footer class="scene">
+    <div class="basket" id="basket" aria-hidden="true"></div>
+    <div class="stove" id="stove" aria-hidden="true">
+      <span class="flame"></span><span class="flame f2"></span><span class="flame f3"></span>
+    </div>
+    <p class="hint" id="hint">같은 재료 5개를 찾아요. 아무 칸이나 누르면 시작합니다.</p>
+  </footer>
+
+  <p class="visually-hidden" id="live" role="status" aria-live="polite"></p>
+
+  <div class="result" id="result" role="dialog" aria-modal="true" aria-labelledby="resultTitle" aria-describedby="resultDesc" hidden>
+    <div class="result-card" id="resultCard" data-outcome="won">
+      <div class="result-art" id="resultArt" aria-hidden="true"></div>
+      <h2 id="resultTitle" tabindex="-1">따뜻한 식사 완성!</h2>
+      <p id="resultDesc">목표 재료를 모두 찾았습니다.</p>
+      <dl class="result-stats">
+        <div><dt>총점</dt><dd id="rScore">0</dd></div>
+        <div><dt>찾은 개수</dt><dd id="rFound">0 / 5</dd></div>
+        <div><dt>남은 시간</dt><dd id="rTime">0.0초</dd></div>
+      </dl>
+      <p class="result-bonus" id="rBonus"></p>
+      <div class="result-cta">
+        <button type="button" class="btn primary" id="replayBtn">다시 찾기</button>
+        <a class="btn ghost" id="moreBtn" href="../../">다른 데모 보기</a>
+      </div>
+      <p class="result-key">키보드: 방향키 이동 · Enter/Space 선택 · R 다시 찾기 · M 음소거</p>
+    </div>
+  </div>
+
+  <noscript>
+    <p class="noscript">이 데모는 JavaScript가 필요합니다. 브라우저에서 JavaScript를 켜고 다시 열어 주세요.</p>
+  </noscript>
+</main>
+
+<script src="./script.js"></script>
+</body>
+</html>

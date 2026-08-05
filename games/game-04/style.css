@@ -1,0 +1,620 @@
+/* 윈터 팬트리 — 겨울 산장 재료 찾기
+   외부 폰트·이미지·SDK 없음. 모든 장식은 CSS 도형과 인라인 SVG. */
+
+:root {
+  --night-0: #0a1420;
+  --night-1: #101d2e;
+  --night-2: #17273b;
+  --wood-0: #4a3423;
+  --wood-1: #63462d;
+  --wood-2: #7d5a3a;
+  --snow: #eef4fb;
+  --ice: #b9d2ea;
+  --ember: #ffb648;
+  --ember-deep: #e07a1f;
+  --good: #6fd6a0;
+  --bad: #ff7a6b;
+  --line: rgba(185, 210, 234, 0.24);
+  --card: rgba(16, 29, 46, 0.92);
+  --radius: 14px;
+  --gap: clamp(6px, 1.8vw, 12px);
+  --pad: clamp(12px, 3.4vw, 20px);
+  --font: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", system-ui, -apple-system, sans-serif;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.42);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  background: var(--night-0);
+}
+
+body {
+  font-family: var(--font);
+  color: var(--snow);
+  -webkit-text-size-adjust: 100%;
+  overflow-x: hidden;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- 셸 ---------- */
+
+.shell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  width: min(100% - 24px, 560px);
+  margin-inline: auto;
+  min-height: 100dvh;
+  padding:
+    calc(var(--pad) + env(safe-area-inset-top))
+    calc(env(safe-area-inset-right))
+    calc(var(--pad) + env(safe-area-inset-bottom))
+    calc(env(safe-area-inset-left));
+  background:
+    radial-gradient(120% 60% at 50% 0%, #1d3149 0%, transparent 62%),
+    linear-gradient(180deg, var(--night-1) 0%, var(--night-0) 70%);
+  isolation: isolate;
+}
+
+/* 눈 — 반복 그라디언트 2겹, 이미지 없음 */
+.snow {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image:
+    radial-gradient(2px 2px at 12% 18%, #fff 50%, transparent 51%),
+    radial-gradient(1.6px 1.6px at 42% 62%, #fff 50%, transparent 51%),
+    radial-gradient(2.2px 2.2px at 74% 32%, #fff 50%, transparent 51%),
+    radial-gradient(1.4px 1.4px at 88% 78%, #fff 50%, transparent 51%),
+    radial-gradient(1.8px 1.8px at 28% 88%, #fff 50%, transparent 51%);
+  background-size: 180px 220px;
+  animation: snowfall 14s linear infinite;
+}
+@keyframes snowfall {
+  from { background-position: 0 -220px, 40px -220px, 80px -220px, 120px -220px, 160px -220px; }
+  to   { background-position: 0 220px, 40px 220px, 80px 220px, 120px 220px, 160px 220px; }
+}
+
+/* ---------- 산장 헤더 ---------- */
+
+.cabin {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: linear-gradient(180deg, rgba(35, 55, 80, 0.6), rgba(16, 29, 46, 0.6));
+}
+
+.cabin-window {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 2px;
+  width: clamp(34px, 10vw, 44px);
+  aspect-ratio: 1;
+  padding: 3px;
+  border-radius: 6px;
+  background: var(--wood-1);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.3);
+}
+.cabin-window .pane {
+  border-radius: 2px;
+  background: linear-gradient(160deg, var(--ember) 0%, var(--ember-deep) 100%);
+  opacity: 0.9;
+}
+
+.cabin-id h1 {
+  margin: 0;
+  font-size: clamp(1.05rem, 4.4vw, 1.35rem);
+  letter-spacing: 0.02em;
+}
+.cabin-sub {
+  margin: 2px 0 0;
+  font-size: clamp(0.7rem, 2.9vw, 0.8rem);
+  color: var(--ice);
+}
+
+.icon-btn {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 12px;
+  font: inherit;
+  font-size: 0.78rem;
+  color: var(--snow);
+  background: rgba(185, 210, 234, 0.12);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  cursor: pointer;
+}
+.icon-btn:hover { background: rgba(185, 210, 234, 0.2); }
+.icon-btn[aria-pressed="true"] { color: var(--ice); }
+
+/* ---------- HUD ---------- */
+
+.hud {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: var(--gap);
+}
+
+.goal {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--card);
+  transition: box-shadow 180ms ease;
+}
+.goal[data-pulse="1"] { box-shadow: 0 0 0 2px var(--ember); }
+
+.goal-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: clamp(44px, 13vw, 56px);
+  aspect-ratio: 1;
+  border-radius: 12px;
+  background: rgba(238, 244, 251, 0.1);
+  border: 1px solid var(--line);
+}
+.goal-icon svg { width: 84%; height: 84%; }
+
+.goal-label {
+  margin: 0;
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+  color: var(--ice);
+}
+.goal-name {
+  margin: 1px 0 2px;
+  font-size: clamp(0.98rem, 4.2vw, 1.2rem);
+  font-weight: 700;
+}
+.goal-count {
+  margin: 0;
+  font-size: 0.76rem;
+  color: var(--ice);
+}
+.goal-count b { color: var(--snow); font-size: 0.92rem; }
+
+.meters {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--card);
+}
+
+.meter-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 0.7rem;
+  color: var(--ice);
+  margin-bottom: 5px;
+}
+.meter-head b { font-size: 0.9rem; color: var(--snow); font-variant-numeric: tabular-nums; }
+
+.bar {
+  height: 9px;
+  border-radius: 999px;
+  background: rgba(185, 210, 234, 0.18);
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+.bar i {
+  display: block;
+  height: 100%;
+  width: 100%;
+  transform-origin: left center;
+  transform: scaleX(var(--p, 1));
+  background: linear-gradient(90deg, var(--ember), #ffe08a);
+  transition: transform 120ms linear, background 220ms ease;
+}
+.shell[data-low="1"] .bar i { background: linear-gradient(90deg, #ff6a52, #ffa06b); }
+
+.meter-row { display: flex; gap: 8px; }
+.chip {
+  flex: 1;
+  margin: 0;
+  padding: 6px 8px;
+  font-size: 0.68rem;
+  color: var(--ice);
+  text-align: center;
+  border-radius: 9px;
+  background: rgba(185, 210, 234, 0.1);
+}
+.chip b { display: block; font-size: 0.92rem; color: var(--snow); font-variant-numeric: tabular-nums; }
+#comboChip[data-hot="1"] b { color: var(--ember); }
+
+/* ---------- 선반 ---------- */
+
+/* 선반은 내용 높이만 차지하고 남는 세로 공간의 가운데에 놓인다. */
+.pantry { flex: 1 1 auto; display: flex; align-items: center; }
+
+.shelf {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-auto-rows: max-content;
+  gap: var(--gap);
+  align-content: center;
+  justify-content: center;
+  padding: clamp(10px, 3vw, 18px);
+  border-radius: var(--radius);
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  background:
+    repeating-linear-gradient(180deg, rgba(0,0,0,0.18) 0 2px, transparent 2px 26px),
+    linear-gradient(180deg, var(--wood-2), var(--wood-0));
+  box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.cell {
+  position: relative;
+  display: grid;
+  place-items: center;
+  gap: 2px;
+  min-height: 44px;
+  min-width: 44px;
+  aspect-ratio: 1;
+  padding: 3px 2px;
+  font: inherit;
+  color: var(--snow);
+  background: linear-gradient(180deg, rgba(238, 244, 251, 0.16), rgba(238, 244, 251, 0.06));
+  border: 1px solid rgba(238, 244, 251, 0.22);
+  border-radius: 11px;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 120ms ease, background 140ms ease, border-color 140ms ease;
+}
+.cell:hover { background: rgba(238, 244, 251, 0.24); }
+.cell:active { transform: scale(0.95); }
+
+.cell svg { width: min(74%, 46px); height: auto; pointer-events: none; }
+.cell .tag {
+  font-size: clamp(0.5rem, 2.1vw, 0.62rem);
+  line-height: 1;
+  color: rgba(238, 244, 251, 0.82);
+  pointer-events: none;
+}
+
+.cell:focus-visible {
+  outline: 3px solid var(--ember);
+  outline-offset: 2px;
+  z-index: 2;
+}
+
+.cell[data-state="collected"] {
+  background: rgba(111, 214, 160, 0.16);
+  border-color: rgba(111, 214, 160, 0.5);
+  cursor: default;
+}
+.cell[data-state="collected"] svg { opacity: 0.28; }
+.cell[data-state="collected"]::after {
+  content: "✓";
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: clamp(1.1rem, 5vw, 1.6rem);
+  font-weight: 700;
+  color: var(--good);
+}
+
+.cell[data-state="wrong"] {
+  background: rgba(255, 122, 107, 0.2);
+  border-color: rgba(255, 122, 107, 0.65);
+  animation: shake 160ms ease;
+}
+.cell[data-state="wrong"]::after {
+  content: "✕";
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: clamp(1.1rem, 5vw, 1.6rem);
+  font-weight: 700;
+  color: var(--bad);
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+.cell[data-hit="1"] { animation: pop 220ms ease; }
+@keyframes pop {
+  0% { transform: scale(1); }
+  45% { transform: scale(1.14); }
+  100% { transform: scale(1); }
+}
+
+.shell[data-phase="WON"] .cell,
+.shell[data-phase="LOST"] .cell { cursor: default; }
+
+/* 정답 시 바구니로 날아가는 복제 아이콘 */
+.fly {
+  position: fixed;
+  z-index: 40;
+  width: 40px;
+  height: 40px;
+  pointer-events: none;
+  transition: transform 320ms cubic-bezier(.34,.9,.4,1), opacity 320ms ease;
+}
+.fly svg { width: 100%; height: 100%; }
+
+/* ---------- 하단 장면 ---------- */
+
+.scene {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 10px 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--card);
+}
+
+.basket {
+  display: flex;
+  gap: 6px;
+}
+.slot {
+  width: clamp(22px, 6.5vw, 30px);
+  aspect-ratio: 1;
+  border-radius: 7px;
+  border: 1px dashed rgba(185, 210, 234, 0.45);
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.2);
+}
+.slot svg { width: 80%; height: 80%; }
+.slot[data-filled="1"] {
+  border-style: solid;
+  border-color: rgba(111, 214, 160, 0.6);
+  background: rgba(111, 214, 160, 0.14);
+}
+
+.stove {
+  position: relative;
+  width: clamp(34px, 9vw, 44px);
+  height: clamp(26px, 7vw, 34px);
+  border-radius: 8px 8px 5px 5px;
+  background: linear-gradient(180deg, #3b3b46, #23232b);
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+.flame {
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  width: 34%;
+  height: 58%;
+  border-radius: 50% 50% 45% 45%;
+  background: linear-gradient(180deg, #ffe08a, var(--ember-deep));
+  transform: translateX(-50%);
+  animation: flicker 1.3s ease-in-out infinite;
+}
+.flame.f2 { left: 32%; width: 24%; height: 42%; animation-delay: .35s; }
+.flame.f3 { left: 68%; width: 24%; height: 42%; animation-delay: .7s; }
+@keyframes flicker {
+  0%, 100% { transform: translateX(-50%) scaleY(1); opacity: .95; }
+  50% { transform: translateX(-50%) scaleY(1.22); opacity: 1; }
+}
+.shell[data-phase="LOST"] .flame { animation: none; opacity: .28; transform: translateX(-50%) scaleY(.5); }
+
+.hint {
+  grid-column: 1 / -1;
+  margin: 0;
+  min-height: 1.2em;
+  font-size: clamp(0.7rem, 3vw, 0.8rem);
+  color: var(--ice);
+}
+.hint[data-tone="bad"] { color: var(--bad); }
+.hint[data-tone="good"] { color: var(--good); }
+
+/* ---------- 결과 ---------- */
+
+.result {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  background: rgba(8, 15, 24, 0.62);
+  backdrop-filter: blur(2px);
+}
+.result[hidden] { display: none; }
+
+.result-card {
+  width: min(100%, 360px);
+  padding: 18px;
+  text-align: center;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: linear-gradient(180deg, #1b2c42, #101d2e);
+  box-shadow: var(--shadow);
+  animation: rise 220ms ease;
+}
+@keyframes rise {
+  from { transform: translateY(14px); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+
+.result-art { display: grid; place-items: center; margin-bottom: 4px; }
+.result-art svg { width: clamp(64px, 22vw, 88px); height: auto; }
+
+.result-card h2 {
+  margin: 4px 0 6px;
+  font-size: clamp(1.1rem, 5vw, 1.35rem);
+}
+.result-card h2:focus-visible { outline: 3px solid var(--ember); outline-offset: 4px; border-radius: 6px; }
+#resultDesc { margin: 0 0 12px; font-size: 0.84rem; color: var(--ice); }
+
+.result-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 0 0 8px;
+}
+.result-stats div {
+  padding: 8px 4px;
+  border-radius: 10px;
+  background: rgba(185, 210, 234, 0.1);
+}
+.result-stats dt { font-size: 0.64rem; color: var(--ice); }
+.result-stats dd {
+  margin: 3px 0 0;
+  font-size: 0.98rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.result-bonus {
+  margin: 0 0 12px;
+  min-height: 1.1em;
+  font-size: 0.76rem;
+  color: var(--ember);
+}
+
+.result-cta { display: flex; gap: 8px; }
+.btn {
+  flex: 1;
+  min-height: 46px;
+  display: grid;
+  place-items: center;
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+.btn.primary { background: linear-gradient(180deg, var(--ember), var(--ember-deep)); color: #22160a; }
+.btn.ghost { background: rgba(185, 210, 234, 0.12); color: var(--snow); border-color: var(--line); }
+.btn:focus-visible { outline: 3px solid var(--snow); outline-offset: 2px; }
+
+.result-key { margin: 10px 0 0; font-size: 0.66rem; color: rgba(185, 210, 234, 0.75); }
+
+.noscript {
+  margin: 16px;
+  padding: 14px;
+  border-radius: 12px;
+  background: rgba(255, 122, 107, 0.18);
+  border: 1px solid var(--bad);
+}
+
+/* 개발용 자기 테스트 패널 (?test=1) */
+.test-panel {
+  position: fixed;
+  left: 8px; bottom: 8px;
+  z-index: 90;
+  max-width: min(92vw, 360px);
+  max-height: 44vh;
+  overflow: auto;
+  padding: 10px 12px;
+  font: 12px/1.5 ui-monospace, Menlo, Consolas, monospace;
+  white-space: pre-wrap;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: rgba(8, 15, 24, 0.94);
+}
+.test-panel b { color: var(--good); }
+.test-panel i { color: var(--bad); font-style: normal; }
+
+/* ---------- 반응형 ---------- */
+
+/* 낮은 높이: 장식 축소, 보드 우선 */
+@media (max-height: 650px) {
+  .cabin-window { display: none; }
+  .cabin { padding: 6px 10px; }
+  .scene { padding: 7px 10px; }
+  .result-art { display: none; }
+}
+
+/* 가로 화면: 2열 셸 (DOM 순서·키보드 좌표는 유지) */
+@media (orientation: landscape) and (max-height: 560px) {
+  .shell {
+    width: min(100% - 20px, 760px);
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    grid-template-rows: auto auto 1fr;
+    align-content: start;
+  }
+  .cabin { grid-column: 1; grid-row: 1; }
+  .hud { grid-column: 1; grid-row: 2; grid-template-columns: 1fr; }
+  .scene { grid-column: 1; grid-row: 3; align-content: start; }
+  .pantry { grid-column: 2; grid-row: 1 / -1; }
+  .snow { display: none; }
+}
+
+/* 데스크톱에서 셀 상한 */
+@media (min-width: 600px) {
+  .shelf { grid-template-columns: repeat(5, minmax(0, 82px)); }
+}
+
+/* ---------- 감소된 모션 ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+  .snow { display: none; }
+  .fly { display: none !important; }
+  .flame { animation: none; }
+}
+
+/* ---------- 강제 색상 / 고대비 ---------- */
+
+@media (forced-colors: active) {
+  .snow, .cabin-window, .stove, .flame { display: none; }
+  .shelf { background: Canvas; border: 1px solid CanvasText; box-shadow: none; }
+  .cell, .goal, .meters, .cabin, .scene, .result-card, .chip, .slot {
+    background: Canvas;
+    color: CanvasText;
+    border: 1px solid CanvasText;
+    forced-color-adjust: none;
+  }
+  .cell[data-state="collected"] { border-width: 3px; }
+  .cell[data-state="wrong"] { border-style: dashed; border-width: 3px; }
+  .bar i { background: Highlight; }
+  .btn { border: 1px solid CanvasText; background: ButtonFace; color: ButtonText; }
+  .cell:focus-visible, .btn:focus-visible { outline: 3px solid Highlight; }
+}
+
+@media (prefers-contrast: more) {
+  :root { --line: rgba(238, 244, 251, 0.6); }
+  .cell { border-color: rgba(238, 244, 251, 0.55); }
+  .goal-label, .goal-count, .chip, .hint, .meter-head { color: #dfeaf6; }
+}
