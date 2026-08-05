@@ -12,6 +12,7 @@
     {
       index: 1,
       dir: "game-01",
+      thumbFocus: "44%",
       slug: "order-tray",
       title: "오더 트레이",
       titleEn: "Order Tray",
@@ -27,6 +28,7 @@
     {
       index: 2,
       dir: "game-02",
+      thumbFocus: "35%",
       slug: "perfect-slice",
       title: "퍼펙트 슬라이스",
       titleEn: "Perfect Slice",
@@ -41,6 +43,7 @@
     {
       index: 3,
       dir: "game-03",
+      thumbFocus: "80%",
       slug: "plate-stack",
       title: "플레이트 스택",
       titleEn: "Plate Stack",
@@ -55,6 +58,7 @@
     {
       index: 4,
       dir: "game-04",
+      thumbFocus: "71%",
       slug: "winter-pantry",
       title: "윈터 팬트리",
       titleEn: "Winter Pantry",
@@ -69,6 +73,7 @@
     {
       index: 5,
       dir: "game-05",
+      thumbFocus: "76%",
       slug: "pixel-pour",
       title: "픽셀 푸어",
       titleEn: "Pixel Pour",
@@ -83,6 +88,7 @@
     {
       index: 6,
       dir: "game-06",
+      thumbFocus: "32%",
       slug: "rush-counter",
       title: "러시 카운터",
       titleEn: "Rush Counter",
@@ -97,6 +103,7 @@
     {
       index: 7,
       dir: "game-07",
+      thumbFocus: "44%",
       slug: "kitchen-tidy",
       title: "키친 타이디",
       titleEn: "Kitchen Tidy",
@@ -112,6 +119,7 @@
     {
       index: 8,
       dir: "game-08",
+      thumbFocus: "22%",
       slug: "dish-collect",
       title: "디시 컬렉트",
       titleEn: "Dish Collect",
@@ -142,9 +150,27 @@
   }
 
   function thumb(game) {
-    // 게임별 썸네일도 외부 이미지 없이 만든다 — 번호 + 유형 색으로 구분한다.
+    // 번호 + 유형 색 배경은 그대로 두고, 그 위에 실제 플레이 화면을 얹는다.
+    // 이미지는 우리 데모를 직접 촬영한 것이라 외부 요청은 여전히 0건이다 (scripts/capture-thumbs.mjs).
+    // 파일이 없거나 깨지면 <img> 를 걷어내 원래의 색 배경으로 되돌아간다 — 카드가 비지 않는다.
     var box = el("div", "card__thumb band-" + game.band);
     box.setAttribute("aria-hidden", "true");
+
+    var shot = new Image();
+    shot.className = "card__shot";
+    shot.src = "assets/thumbs/" + game.dir + ".jpg";
+    shot.alt = "";
+    shot.loading = "lazy";
+    shot.decoding = "async";
+    shot.width = 360;
+    shot.height = 780;
+    // 세로 스크린샷을 가로 카드에 담으므로 타이틀마다 보여줄 세로 위치가 다르다.
+    if (game.thumbFocus) shot.style.objectPosition = "50% " + game.thumbFocus;
+    shot.addEventListener("error", function () {
+      shot.remove();
+    });
+    box.appendChild(shot);
+
     box.appendChild(el("span", "card__num", String(game.index).padStart(2, "0")));
     box.appendChild(el("span", "card__band", game.band));
     return box;

@@ -29,6 +29,7 @@ const MIME = {
   ".js": "text/javascript; charset=utf-8",
   ".json": "application/json; charset=utf-8",
   ".svg": "image/svg+xml",
+  ".jpg": "image/jpeg",
 };
 
 let server = null;
@@ -163,6 +164,17 @@ expect(consoleErrors.length === 0, `허브 콘솔 오류·경고 0건${consoleEr
 expect(externalRequests.length === 0, `허브 외부 요청 0건${externalRequests.length ? " → " + externalRequests.join(" | ") : ""}`);
 expect(failedRequests.length === 0, `허브 실패 요청 0건${failedRequests.length ? " → " + failedRequests.join(" | ") : ""}`);
 
+// 카드 썸네일. 404 는 loadingFailed 를 내지 않으므로(응답 자체는 정상 완료다) 실패 요청 검사로는 안 잡힌다.
+// lazy 이미지는 화면 밖이면 complete=false 라 그냥 세면 놓친다 → eager 로 바꾸고 기다린 뒤 판정한다.
+await evaluate(`[...document.images].forEach((i) => { i.loading = 'eager'; })`);
+await sleep(1200);
+const shots = await evaluate(`(() => {
+  const imgs = [...document.querySelectorAll('#game-grid .card__shot')];
+  return { total: imgs.length, broken: imgs.filter((i) => i.naturalWidth === 0).map((i) => i.getAttribute('src')) };
+})()`);
+expect(shots.total === 8, `카드 썸네일 8장 렌더 (실제 ${shots.total})`);
+expect(shots.broken.length === 0, `카드 썸네일 깨짐 0건${shots.broken.length ? " → " + shots.broken.join(" | ") : ""}`);
+
 // 필터 동작
 const filtered = await evaluate(`(() => {
   document.querySelector('[data-filter="six-second"]').click();
@@ -199,6 +211,30 @@ for (const href of hub.links) {
   expect(consoleErrors.length === 0, `${name}: 콘솔 오류·경고 0건${consoleErrors.length ? " → " + consoleErrors.slice(0, 3).join(" | ") : ""}`);
   expect(externalRequests.length === 0, `${name}: 외부 요청 0건${externalRequests.length ? " → " + externalRequests.join(" | ") : ""}`);
   expect(failedRequests.length === 0, `${name}: 실패 요청 0건${failedRequests.length ? " → " + failedRequests.join(" | ") : ""}`);
+}
+
+// ── 허브 복귀 동선 ──────────────────────────────────────
+// 8종은 각자 독립 실행되지만, 팩으로 묶인 이상 "다른 데모 보기" 는 허브로 돌아와야 한다.
+// 링크가 <a href> 인 타이틀과 JS 로 이동하는 타이틀이 섞여 있어, 실제로 눌러 보고 착지 경로를 본다.
+// (game-01 이 실제로 이동하지 않고 안내 문구만 띄우던 것을 이 검사로 잡았다.)
+for (const href of hub.links) {
+  const name = href.split("/")[1];
+  await goto(`${origin}/${href}`);
+  const clicked = await evaluate(`(() => {
+    const hit = [...document.querySelectorAll('a, button')].find((e) => /다른 (데모|게임)|둘러보기/.test(e.textContent || ''));
+    if (!hit) return false;
+    hit.hidden = false;
+    hit.disabled = false;
+    const wrap = hit.closest('[hidden]');
+    if (wrap) wrap.hidden = false;
+    hit.click();
+    return true;
+  })()`);
+  expect(clicked, `${name}: 허브로 돌아가는 링크 존재`);
+  if (!clicked) continue;
+  await sleep(1200);
+  const landed = await evaluate("location.pathname");
+  expect(landed === "/index.html" || landed === "/", `${name}: 허브로 복귀 (착지 ${landed})`);
 }
 
 for (const label of checks) console.log(`  ok  ${label}`);

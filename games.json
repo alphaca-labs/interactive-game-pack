@@ -60,6 +60,7 @@
     {
       "index": 1,
       "dir": "game-01",
+      "thumbFocus": "44%",
       "slug": "order-tray",
       "title": "오더 트레이",
       "titleEn": "Order Tray",
@@ -75,6 +76,7 @@
     {
       "index": 2,
       "dir": "game-02",
+      "thumbFocus": "35%",
       "slug": "perfect-slice",
       "title": "퍼펙트 슬라이스",
       "titleEn": "Perfect Slice",
@@ -90,6 +92,7 @@
     {
       "index": 3,
       "dir": "game-03",
+      "thumbFocus": "80%",
       "slug": "plate-stack",
       "title": "플레이트 스택",
       "titleEn": "Plate Stack",
@@ -105,6 +108,7 @@
     {
       "index": 4,
       "dir": "game-04",
+      "thumbFocus": "71%",
       "slug": "winter-pantry",
       "title": "윈터 팬트리",
       "titleEn": "Winter Pantry",
@@ -120,6 +124,7 @@
     {
       "index": 5,
       "dir": "game-05",
+      "thumbFocus": "76%",
       "slug": "pixel-pour",
       "title": "픽셀 푸어",
       "titleEn": "Pixel Pour",
@@ -135,6 +140,7 @@
     {
       "index": 6,
       "dir": "game-06",
+      "thumbFocus": "32%",
       "slug": "rush-counter",
       "title": "러시 카운터",
       "titleEn": "Rush Counter",
@@ -150,6 +156,7 @@
     {
       "index": 7,
       "dir": "game-07",
+      "thumbFocus": "44%",
       "slug": "kitchen-tidy",
       "title": "키친 타이디",
       "titleEn": "Kitchen Tidy",
@@ -165,6 +172,7 @@
     {
       "index": 8,
       "dir": "game-08",
+      "thumbFocus": "22%",
       "slug": "dish-collect",
       "title": "디시 컬렉트",
       "titleEn": "Dish Collect",
