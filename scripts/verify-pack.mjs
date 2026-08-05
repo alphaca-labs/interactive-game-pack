@@ -51,6 +51,10 @@ if (!origin) {
   origin = `http://127.0.0.1:${HTTP_PORT}`;
 }
 
+// 허브가 실제로 서비스되는 경로 접두사. 로컬은 "", GitHub Pages 는 "/interactive-game-pack".
+// 착지 경로 판정이 이 값에서 파생돼야 공개 URL 에서도 같은 검사가 성립한다.
+const hubBase = new URL(origin).pathname.replace(/\/+$/, "");
+
 const profile = mkdtempSync(join(tmpdir(), "pack-chrome-"));
 const chrome = spawn(
   CHROME,
@@ -234,7 +238,11 @@ for (const href of hub.links) {
   if (!clicked) continue;
   await sleep(1200);
   const landed = await evaluate("location.pathname");
-  expect(landed === "/index.html" || landed === "/", `${name}: 허브로 복귀 (착지 ${landed})`);
+  // 기대 착지는 origin 의 경로에서 파생해야 한다. 루트("/index.html"·"/")로 못박으면
+  // GitHub Pages 하위 경로(/interactive-game-pack/index.html)에서 8종 전부 거짓 실패로
+  // 뜬다 — 정작 «공개 URL» 이 유일하게 중요한 환경인데 그 환경에서만 못 쓰는 검사가 된다.
+  const expected = new Set([`${hubBase}/index.html`, `${hubBase}/`, hubBase || "/"]);
+  expect(expected.has(landed), `${name}: 허브로 복귀 (착지 ${landed} · 기대 ${[...expected].join(" | ")})`);
 }
 
 for (const label of checks) console.log(`  ok  ${label}`);
