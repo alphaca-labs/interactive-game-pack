@@ -56,16 +56,38 @@ python3 -m http.server 8080  # http 로 확인하려면
 - **접근성** — 라이브 리전 · 포커스 이동 · `prefers-reduced-motion` 대응.
 - **반응형** — 320×568 ~ 1440×900 가로 스크롤 없음. 세로 화면 우선.
 
+## 디렉터리 규약과 `game.json`
+
+구현 경로는 **`games/game-0N/`** 하나로 통일돼 있다. 기획서(`outputs/plans/*.md`)는 슬러그(`games/order-tray/`)로
+적혀 있던 시기가 있어 **경로 근거로 쓰지 않는다** — 그 문구를 믿고 링크를 만들면 8종 전부 404 가 된다.
+
+목록·링크의 근거는 각 디렉터리가 스스로 신고하는 `games/<dir>/game.json` 이다. 통합·배포 단계는 이름 규칙을
+가정하지 말고 `games/*/game.json` 을 글롭해 목록을 만든다. 계약은 다음과 같다.
+
+| 키 | 계약 |
+|---|---|
+| `index` · `dir` · `slug` · `title` | `games.json` 과 값이 같아야 한다(SSOT 는 `games.json`) |
+| `entry` | **디렉터리 상대 경로**(`index.html`). 루트 상대(`games/game-03/index.html`)로 적으면 글롭해서 이어 붙이는 쪽이 `games/game-03/games/game-03/index.html` 을 만든다 — 실제로 3개가 서로 다른 규칙이었다 |
+| `type` · `estimate` | `games.json` 의 `typeBands` 에서 유형별로 파생한다(항목마다 다시 적지 않는다) |
+
+```sh
+node scripts/sync-game-manifests.mjs          # games.json → games/*/game.json 재생성
+node scripts/sync-game-manifests.mjs --check  # 쓰지 않고 어긋남만 보고 (비영 종료)
+```
+
+확장 필드(`assets` · `queryParams` · `shortcuts` · `qa` · `runtime` …)는 각 게임이 소유하며 재생성해도 보존된다.
+
 ## 검증
 
 ```sh
-node scripts/check-hub.mjs      # 허브 ↔ games.json ↔ 디스크 일치 (63 checks)
+node scripts/check-hub.mjs      # 허브 ↔ games.json ↔ app.js ↔ games/*/game.json 일치 (135 checks)
 node scripts/verify-pack.mjs    # 실제 Chrome 으로 허브 + 8개 진입점 + 허브 복귀 동선 (84 checks)
 node scripts/capture-thumbs.mjs # 카드 썸네일 재생성 → assets/thumbs/
 ```
 
 `check-hub.mjs` 가 막는 것은 "게임이 디스크에는 있는데 허브 목록에서 조용히 빠지는 것" 하나다.
-디렉터리 이름 규약(`game-0N`)이 어긋나면 그 게임은 화면에서 사라지는데 빌드도 테스트도 아무 말을 하지 않는다.
+디렉터리 이름 규약(`game-0N`)이 어긋나거나 `game.json` 이 빠지면 그 게임은 화면에서 사라지는데
+빌드도 테스트도 아무 말을 하지 않는다.
 
 `verify-pack.mjs` 의 **허브 복귀 검사**도 같은 종류의 조용한 실패를 막는다. 8종은 각자 독립 실행되지만
 팩으로 묶인 이상 "다른 데모 보기" 는 허브로 돌아와야 하는데, 링크가 `<a href>` 인 타이틀과 JS 로 이동하는

@@ -1,0 +1,28 @@
+{
+  "index": 6,
+  "dir": "game-06",
+  "slug": "rush-counter",
+  "title": "러시 카운터",
+  "titleEn": "Rush Counter",
+  "entry": "index.html",
+  "type": "D — 시뮬레이션",
+  "group": "after-1m45",
+  "sourceTimestamp": "01:52",
+  "sessionSeconds": [
+    45,
+    45
+  ],
+  "summary": "버거 · 감자 · 음료를 조리해 대기 손님에게 서빙하고, 바닥에 쌓인 현금을 수거해 45초 안에 목표 금액을 채운다.",
+  "estimate": {
+    "quoteKrw": [
+      12000000,
+      16000000
+    ],
+    "businessDays": [
+      15,
+      20
+    ],
+    "note": "시니어 HTML5 개발 1인 + UI/아트 0.5인 + QA 0.5인 = 1트랙 · 1레벨 · 국문 UI · 승인 1회 · 사운드 옵션 · 광고 SDK 미포함 · 전 금액 VAT 별도"
+  },
+  "plan": "outputs/plans/rush-counter.md"
+}

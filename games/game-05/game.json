@@ -1,0 +1,28 @@
+{
+  "index": 5,
+  "dir": "game-05",
+  "slug": "pixel-pour",
+  "title": "픽셀 푸어",
+  "titleEn": "Pixel Pour",
+  "entry": "index.html",
+  "type": "C — 물리 · 파티클",
+  "group": "after-1m45",
+  "sourceTimestamp": "01:52",
+  "sessionSeconds": [
+    30,
+    38
+  ],
+  "summary": "하단 색 배치를 같은 색 레인으로 보내면 16×16 픽셀 도안이 채워진다. 38초 안에 진행률 100% 달성이 목표.",
+  "estimate": {
+    "quoteKrw": [
+      9000000,
+      13000000
+    ],
+    "businessDays": [
+      10,
+      15
+    ],
+    "note": "시니어 HTML5 개발 1인 + UI/아트 0.5인 + QA 0.5인 = 1트랙 · 1레벨 · 국문 UI · 승인 1회 · 사운드 옵션 · 광고 SDK 미포함 · 전 금액 VAT 별도"
+  },
+  "plan": "outputs/plans/pixel-pour.md"
+}

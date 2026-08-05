@@ -1,5 +1,7 @@
 # Order Tray(오더 트레이) 제작 계획
 
+> **구현 경로는 `games/game-01/` 다.** 이 문서가 아니라 `games/game-01/game.json` 이 경로·슬러그·견적의 근거이며, 목록·링크는 `games/*/game.json` 을 글롭해 만든다(검증: `scripts/check-hub.mjs`). 아래 본문의 경로는 실제 디렉터리에 맞춰 갱신했다.
+
 > 작업 항목 1/8 · 슬러그 `order-tray` · 유형 **B — 보드상태 퍼즐** · 출처 `00:06` 4종 중 1번
 > 근거 프레임: `outputs/frames/g1-detail.png`, `outputs/frames/group1-006s.png`
 > 이 문서는 `outputs/work-items.json` 의 항목 1을 SSOT 로 삼는다. 슬러그 확정 이전에 작성된 `outputs/plans/bento-triples.md` 는 같은 게임의 구버전 기획이며 본 문서가 대체한다.
@@ -125,7 +127,7 @@ WON/LOST ── replay ──→ READY
 
 ## 12. 독립 파일 구현 개요
 
-경로는 `games/order-tray/` 이며 아래 3개 파일만 사용한다. 다른 게임이나 공용 파일을 import 하지 않는다.
+경로는 `games/game-01/` 이며 아래 3개 파일만 사용한다. 다른 게임이나 공용 파일을 import 하지 않는다.
 
 ### `index.html`
 - viewport·테마 메타, 의미 있는 `main`, 헤더/코인 HUD, 주문표 영역, 16칸 보드 컨테이너, 트레이 6슬롯, 안내 live region, 결과 모달 마크업, `noscript` 안내.

@@ -1,0 +1,28 @@
+{
+  "index": 2,
+  "dir": "game-02",
+  "slug": "perfect-slice",
+  "title": "퍼펙트 슬라이스",
+  "titleEn": "Perfect Slice",
+  "entry": "index.html",
+  "type": "C — 물리 · 파티클",
+  "group": "six-second",
+  "sourceTimestamp": "00:06",
+  "sessionSeconds": [
+    25,
+    40
+  ],
+  "summary": "25초 안에 오이를 5번 잘라 6조각으로 만든다. 조각 두께의 표준편차가 그대로 점수가 된다.",
+  "estimate": {
+    "quoteKrw": [
+      9000000,
+      13000000
+    ],
+    "businessDays": [
+      10,
+      15
+    ],
+    "note": "시니어 HTML5 개발 1인 + UI/아트 0.5인 + QA 0.5인 = 1트랙 · 1레벨 · 국문 UI · 승인 1회 · 사운드 옵션 · 광고 SDK 미포함 · 전 금액 VAT 별도"
+  },
+  "plan": "outputs/plans/perfect-slice.md"
+}

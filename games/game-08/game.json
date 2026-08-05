@@ -1,0 +1,28 @@
+{
+  "index": 8,
+  "dir": "game-08",
+  "slug": "dish-collect",
+  "title": "디시 컬렉트",
+  "titleEn": "Dish Collect",
+  "entry": "index.html",
+  "type": "A — 탭 매칭",
+  "group": "after-1m45",
+  "sourceTimestamp": "01:52",
+  "sessionSeconds": [
+    30,
+    45
+  ],
+  "summary": "상단 목표 접시가 요구하는 재료를 하단 보드에서 찾아 탭해 수집한다. 접시 하나를 완성할 때마다 다음 요리로 교체된다.",
+  "estimate": {
+    "quoteKrw": [
+      4500000,
+      6500000
+    ],
+    "businessDays": [
+      5,
+      7
+    ],
+    "note": "시니어 HTML5 개발 1인 + UI/아트 0.5인 + QA 0.5인 = 1트랙 · 1레벨 · 국문 UI · 승인 1회 · 사운드 옵션 · 광고 SDK 미포함 · 전 금액 VAT 별도"
+  },
+  "plan": "outputs/plans/dish-collect.md"
+}

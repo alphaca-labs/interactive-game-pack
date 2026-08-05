@@ -1,0 +1,28 @@
+{
+  "index": 4,
+  "dir": "game-04",
+  "slug": "winter-pantry",
+  "title": "윈터 팬트리",
+  "titleEn": "Winter Pantry",
+  "entry": "index.html",
+  "type": "A — 탭 매칭",
+  "group": "six-second",
+  "sourceTimestamp": "00:06",
+  "sessionSeconds": [
+    20,
+    30
+  ],
+  "summary": "30초 안에 5×4 선반에서 목표 재료 5개를 찾아 탭한다. 오답은 −2초 · −50점, 연속 정답은 콤보 배수.",
+  "estimate": {
+    "quoteKrw": [
+      4500000,
+      6500000
+    ],
+    "businessDays": [
+      5,
+      7
+    ],
+    "note": "시니어 HTML5 개발 1인 + UI/아트 0.5인 + QA 0.5인 = 1트랙 · 1레벨 · 국문 UI · 승인 1회 · 사운드 옵션 · 광고 SDK 미포함 · 전 금액 VAT 별도"
+  },
+  "plan": "outputs/plans/winter-pantry.md"
+}

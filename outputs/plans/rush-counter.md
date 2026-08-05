@@ -1,12 +1,14 @@
 # Rush Counter 제작 계획
 
+> **구현 경로는 `games/game-06/` 다.** 이 문서가 아니라 `games/game-06/game.json` 이 경로·슬러그·견적의 근거이며, 목록·링크는 `games/*/game.json` 을 글롭해 만든다(검증: `scripts/check-hub.mjs`). 아래 본문의 경로는 실제 디렉터리에 맞춰 갱신했다.
+
 ## 1. 한 줄 약속과 범위
 
 **45초 동안 세 조리대를 동시에 돌리고, 몰려드는 주문을 정확히 서빙한 뒤 현금 더미를 걷어 160코인을 버는 한 손 레스토랑 러시.** 주문을 먼저 읽고 조리를 병렬로 예약하는 판단, 완성 음식이 상하기 전 수거하는 긴장, 서빙 후 정산까지 챙기는 리듬을 짧은 세션에 압축한다.
 
 - 근거: `outputs/frames/group2-112s.png`, `outputs/frames/group2-140s.png`, `outputs/frames/group2-160s.png`의 두 번째 패널에서 확인되는 손님 대기열, `버거 ×1` 주문 말풍선, 조리 설비, 현금 HUD `69 → 200 → 500`, 카운터의 지폐 더미를 메커닉 근거로 삼는다. 원본 로고·캐릭터·화면 구성은 복제하지 않는다.
 - 제작 가정: 영상에서 확인되지 않은 조리 시간, 주문 분포, 성공·실패 조건과 연출은 아래 수치로 고정한다.
-- 산출물: 외부 라이브러리·폰트·이미지·공유 코드 없이 단독 실행되는 `games/rush-counter/index.html`, `style.css`, `script.js` 3개 파일.
+- 산출물: 외부 라이브러리·폰트·이미지·공유 코드 없이 단독 실행되는 `games/game-06/index.html`, `style.css`, `script.js` 3개 파일.
 - 범위: 한국어 UI, 단일 45초 레벨, 시작 안내, 플레이, 성공/실패, 다시 하기, 음향 설정까지. 광고 SDK, 분석 SDK, 서버, 결제, 다국어, 추가 레벨은 제외한다.
 
 ## 2. 30–60초 플레이 루프
@@ -165,19 +167,19 @@
 
 ## 8. 독립 파일 구현 개요
 
-### `games/rush-counter/index.html`
+### `games/game-06/index.html`
 
 - 시작 패널, 게임 HUD, 고객/주문, 보관대, 세 조리대, 현금 수거 버튼, 상태 알림, 일시정지·결과 모달의 의미 구조를 선언한다.
 - 외부 URL이나 공유 헤더/푸터를 참조하지 않고 `style.css`, `script.js`만 상대 경로로 로드한다.
 - 캔버스 없이 DOM과 인라인 SVG 템플릿을 사용해 확대·접근성·디버깅을 단순화한다.
 
-### `games/rush-counter/style.css`
+### `games/game-06/style.css`
 
 - 색·간격·타이밍을 CSS 변수로 관리하고 세로 기본 레이아웃, 2열 미디어 쿼리, 안전 영역, 터치 크기, 포커스, 고대비 상태, 모달을 정의한다.
 - 진행률은 `--progress`, 인내는 `--patience`, 조리 상태는 `data-state`로 표현한다.
 - `prefers-reduced-motion`과 `prefers-contrast: more` 대체 스타일을 포함한다.
 
-### `games/rush-counter/script.js`
+### `games/game-06/script.js`
 
 - 단일 IIFE와 `CONFIG`, `state`를 두고 `Station`, `Customer`, `CashTray` 데이터 객체 및 순수 함수 `createOrder`, `canServe`, `calculatePayout`, `advanceStation`, `settleCustomer`, `collectCash`를 구성한다.
 - `requestAnimationFrame` 루프는 실제 경과 시간으로 시프트·인내·조리를 갱신하고, DOM 쓰기는 값이 바뀐 요소에만 수행한다.
